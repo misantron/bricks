@@ -6,11 +6,11 @@ class HTML extends Element
 {
     public function __construct($content)
     {
-        parent::__construct($content, '', []);
+        parent::__construct('', '', ['value' => $content]);
     }
 
     public function render()
     {
-        echo $this->getLabel();
+        echo $this->attributes['value'];
     }
 }

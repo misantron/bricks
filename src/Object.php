@@ -7,11 +7,11 @@ use Bricks\Exception\UnknownPropertyException;
 
 abstract class Object
 {
-    public function __construct($config = [])
+    public function __construct($properties = [])
     {
-        if(is_array($config) && sizeof($config) > 0) {
-            foreach ($config as $name => $value) {
-                $this->$name = $value;
+        if(is_array($properties) && sizeof($properties) > 0) {
+            foreach ($properties as $name => $value) {
+                $this->setAttribute($name, $value);
             }
         }
         $this->init();
@@ -22,52 +22,24 @@ abstract class Object
 
     }
 
-    public function __get($name)
+    public function setAttribute($name, $value)
     {
-        $getter = 'get' . $name;
-        if (method_exists($this, $getter)) {
-            return $this->$getter();
-        } elseif (method_exists($this, 'set' . $name)) {
-            throw new UnknownMethodException ('Getting write-only property: ' . get_class($this) . '::' . $name);
-        } else {
-            throw new UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
+        if(!isset($this->attributes)) {
+            $this->attributes = [];
         }
+        $this->attributes[$name] = $value;
     }
 
-    public function __set($name, $value)
+    public function getAttributes()
     {
-        $setter = 'set' . $name;
-        if (method_exists($this, $setter)) {
-            $this->$setter($value);
-        } elseif (method_exists($this, 'get' . $name)) {
-            throw new UnknownMethodException ('Setting read-only property: ' . get_class($this) . '::' . $name);
-        } else {
-            throw new UnknownPropertyException('Setting unknown property: ' . get_class($this) . '::' . $name);
+        $attributes = [];
+        foreach($this->attributes as $name => $value) {
+            $str = $name;
+            if($value !== '') {
+                $str .= '="'.htmlspecialchars($value).'"';
+            }
+            $attributes[] = $str;
         }
-    }
-
-    public function __isset($name)
-    {
-        $getter = 'get' . $name;
-        if (method_exists($this, $getter)) {
-            return $this->$getter() !== null;
-        } else {
-            return false;
-        }
-    }
-
-    public function __unset($name)
-    {
-        $setter = 'set' . $name;
-        if (method_exists($this, $setter)) {
-            $this->$setter(null);
-        } elseif (method_exists($this, 'get' . $name)) {
-            throw new UnknownMethodException ('Unsetting read-only property: ' . get_class($this) . '::' . $name);
-        }
-    }
-
-    public function __call($name, $params)
-    {
-        throw new UnknownMethodException ('Calling unknown method: ' . get_class($this) . "::$name()");
+        return implode(' ', $attributes);
     }
 }

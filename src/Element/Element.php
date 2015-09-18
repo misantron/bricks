@@ -12,14 +12,34 @@ abstract class Element extends Object
 
     public function __construct($label, $name, $properties = [])
     {
-        $properties = array_merge($properties, ['label' => $label, 'name' => $name]);
+        if(!empty($name)) {
+            $properties['name'] = $name;
+        }
+        $this->setLabel($label);
 
         parent::__construct($properties);
     }
 
     public function render()
     {
-        echo '<label>' . $this->getLabel() . '</label>';
-        echo '<input' . $this->getAttributes() . '/>';
+        echo '<input ' . $this->getAttributes() . ' />';
+    }
+
+    public function renderLabel()
+    {
+        $label = $this->getLabel();
+        if($label !== '') {
+            echo '<label>' . $label . '</label>';
+        }
+    }
+
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    public function setLabel($label)
+    {
+        $this->label = $label;
     }
 }

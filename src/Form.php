@@ -10,12 +10,18 @@ class Form extends Object
 {
     protected $attributes = [];
     protected $elements = [];
+    /** @var View */
     protected $view;
 
-    public function __construct($id, $config = [])
+    public function __construct($id, $properties = [])
     {
-        parent::__construct($config);
+        $properties = array_merge($properties, ['id' => $id]);
 
+        parent::__construct($properties);
+    }
+
+    public function init()
+    {
         if($this->view === null) {
             $this->view = new View();
         }
@@ -37,11 +43,6 @@ class Form extends Object
         foreach ($list as $element) {
             $this->addElement($element);
         }
-    }
-
-    public function getAttributes()
-    {
-        return $this->attributes;
     }
 
     public function getElements()

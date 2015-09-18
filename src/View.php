@@ -4,8 +4,9 @@ namespace Bricks;
 
 use Bricks\Element\Button;
 use Bricks\Element\Element;
+use Bricks\Element\HTML;
 
-class View extends Object
+class View
 {
     /** @var Form */
     protected $form;
@@ -27,8 +28,9 @@ class View extends Object
             $element = $elements[$i];
 
             if($element instanceof Button) {
-
+                $element->render();
             } else {
+                $element->renderLabel();
                 $element->render();
             }
         }
