@@ -22,7 +22,7 @@ abstract class Element extends Object
 
     public function render()
     {
-        echo '<input ' . $this->getAttributes() . ' />';
+        echo '<input' . $this->getAttributes() . ' />';
     }
 
     public function renderLabel()

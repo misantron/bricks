@@ -16,15 +16,11 @@ class Form extends Object
     public function __construct($id, $properties = [])
     {
         $properties = array_merge($properties, ['id' => $id]);
-
-        parent::__construct($properties);
-    }
-
-    public function init()
-    {
         if($this->view === null) {
             $this->view = new View();
         }
+
+        parent::__construct($properties);
     }
 
     public function addElement($element)
@@ -48,6 +44,11 @@ class Form extends Object
     public function getElements()
     {
         return $this->elements;
+    }
+
+    public function validate()
+    {
+
     }
 
     public function render($returnContent = false)

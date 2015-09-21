@@ -2,9 +2,6 @@
 
 namespace Bricks;
 
-use Bricks\Exception\UnknownMethodException;
-use Bricks\Exception\UnknownPropertyException;
-
 abstract class Object
 {
     public function __construct($properties = [])
@@ -14,14 +11,12 @@ abstract class Object
                 $this->setAttribute($name, $value);
             }
         }
-        $this->init();
     }
 
-    public function init()
-    {
-
-    }
-
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
     public function setAttribute($name, $value)
     {
         if(!isset($this->attributes)) {
@@ -30,16 +25,26 @@ abstract class Object
         $this->attributes[$name] = $value;
     }
 
-    public function getAttributes()
+    /**
+     * @param array|string $ignore
+     * @return string
+     */
+    public function getAttributes($ignore = '')
     {
-        $attributes = [];
-        foreach($this->attributes as $name => $value) {
-            $str = $name;
-            if($value !== '') {
-                $str .= '="'.htmlspecialchars($value).'"';
+        $str = '';
+        if(!empty($this->attributes)) {
+            if(!is_array($ignore)) {
+                $ignore = [$ignore];
             }
-            $attributes[] = $str;
+            $attributes = array_diff(array_keys($this->attributes), $ignore);
+            foreach($attributes as $key) {
+                $str .=  ' ' .$key;
+                if($this->attributes[$key] !== '') {
+                    $str .= '="'.htmlspecialchars($this->attributes[$key], ENT_QUOTES).'"';
+                }
+            }
         }
-        return implode(' ', $attributes);
+
+        return $str;
     }
 }
