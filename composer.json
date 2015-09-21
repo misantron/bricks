@@ -2,6 +2,8 @@
     "name": "misantron/bricks",
     "type": "library",
     "license": "MIT",
+    "keywords": ["php", "html", "form", "builder"],
+    "homepage": "https://github.com/misantron/bricks",
     "require": {
         "php": ">=5.4"
     },
