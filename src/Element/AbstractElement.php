@@ -5,7 +5,7 @@ namespace Bricks\Element;
 use Bricks\Object;
 use Bricks\Validator\AbstractValidator;
 
-class AbstractElement extends Object
+abstract class AbstractElement extends Object
 {
     /** @var string */
     protected $label;
@@ -22,7 +22,7 @@ class AbstractElement extends Object
         if(!empty($name)) {
             $properties['name'] = $name;
         }
-        if(sizeof($validators) > 0) {
+        if(!empty($validators)) {
             $this->validators = $validators;
         }
 
@@ -42,6 +42,9 @@ class AbstractElement extends Object
         }
     }
 
+    /**
+     * @return string
+     */
     public function getLabel()
     {
         return $this->label;
@@ -65,6 +68,17 @@ class AbstractElement extends Object
         return $isValid;
     }
 
+    /**
+     * @return AbstractValidator[]
+     */
+    public function getValidators()
+    {
+        return $this->validators;
+    }
+
+    /**
+     * @return array
+     */
     public function getErrors()
     {
         return $this->errors;

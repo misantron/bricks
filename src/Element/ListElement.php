@@ -12,4 +12,9 @@ class ListElement extends AbstractElement
         
         parent::__construct($label, $name, $properties, $validators);
     }
+
+    public function getOptions()
+    {
+        return $this->options;
+    }
 }

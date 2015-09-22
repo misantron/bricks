@@ -19,7 +19,7 @@ class Select extends ListElement
             $this->attributes['name'] .= '[]';
         }
         echo '<select' . $this->renderAttributes(['value', 'selected']) . '>';
-        foreach($this->options as $value => $title) {
+        foreach($this->getOptions() as $value => $title) {
             echo '<option value="' . htmlspecialchars($value, ENT_QUOTES) . '"';
             if(in_array($value, $this->attributes['value'])) {
                 echo ' selected="selected"';
