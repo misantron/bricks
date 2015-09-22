@@ -4,8 +4,12 @@ namespace Bricks\Validator;
 
 abstract class AbstractValidator
 {
+    /** @var string */
     protected $message;
 
+    /**
+     * @param string $message
+     */
     public function __construct($message = '')
     {
         if(!empty($message)) {
@@ -13,6 +17,9 @@ abstract class AbstractValidator
         }
     }
 
+    /**
+     * @return string
+     */
     public function getMessage()
     {
         return $this->message;

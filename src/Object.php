@@ -4,6 +4,9 @@ namespace Bricks;
 
 abstract class Object
 {
+    /**
+     * @param array $properties
+     */
     public function __construct($properties = [])
     {
         if(is_array($properties) && sizeof($properties) > 0) {
