@@ -26,10 +26,27 @@ abstract class Object
     }
 
     /**
+     * @param string $name
+     * @return mixed|null
+     */
+    public function getAttribute($name)
+    {
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
      * @param array|string $ignore
      * @return string
      */
-    public function getAttributes($ignore = '')
+    public function renderAttributes($ignore = '')
     {
         $str = '';
         if(!empty($this->attributes)) {

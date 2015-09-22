@@ -8,7 +8,7 @@ class Textarea extends Element
 
     public function render()
     {
-        echo '<textarea'.$this->getAttributes(['value']).'>';
+        echo '<textarea'.$this->renderAttributes(['value']).'>';
         if(isset($this->attributes['value']) && !empty($this->attributes['value'])) {
             echo htmlspecialchars($this->attributes['value']);
         }

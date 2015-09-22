@@ -4,30 +4,30 @@ namespace Bricks\Element;
 
 use Bricks\Object;
 
-abstract class Element extends Object
+class Element extends Object
 {
     protected $label;
     protected $weight = 1;
     protected $attributes = [];
 
-    public function __construct($label, $name, $properties = [])
+    public function __construct($label, $name = '', $properties = [])
     {
         if(!empty($name)) {
             $properties['name'] = $name;
         }
-        $this->setLabel($label);
+        $this->label = $label;
 
         parent::__construct($properties);
     }
 
     public function render()
     {
-        echo '<input' . $this->getAttributes() . ' />';
+        echo '<input' . $this->renderAttributes() . ' />';
     }
 
     public function renderLabel()
     {
-        $label = $this->getLabel();
+        $label = $this->label;
         if($label !== '') {
             echo '<label>' . $label . '</label>';
         }
@@ -36,10 +36,5 @@ abstract class Element extends Object
     public function getLabel()
     {
         return $this->label;
-    }
-
-    public function setLabel($label)
-    {
-        $this->label = $label;
     }
 }

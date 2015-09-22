@@ -46,6 +46,11 @@ class Form extends Object
         return $this->elements;
     }
 
+    public function getView()
+    {
+        return $this->view;
+    }
+
     public function validate()
     {
 

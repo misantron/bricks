@@ -18,7 +18,7 @@ class Select extends ListElement
         if(!empty($this->attributes['multiple']) && strpos('[]', $this->attributes['name']) === false) {
             $this->attributes['name'] .= '[]';
         }
-        echo '<select' . $this->getAttributes(['value', 'selected']) . '>';
+        echo '<select' . $this->renderAttributes(['value', 'selected']) . '>';
         foreach($this->options as $value => $title) {
             echo '<option value="' . htmlspecialchars($value, ENT_QUOTES) . '"';
             if(in_array($value, $this->attributes['value'])) {

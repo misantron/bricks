@@ -18,7 +18,7 @@ class View
 
     public function render()
     {
-        echo '<form' . $this->form->getAttributes() . '>';
+        echo '<form' . $this->form->renderAttributes() . '>';
 
         $elements = $this->form->getElements();
         $elementsCount = sizeof($elements);
