@@ -3,8 +3,7 @@
 namespace Bricks;
 
 use Bricks\Element\Button;
-use Bricks\Element\Element;
-use Bricks\Element\HTML;
+use Bricks\Element\AbstractElement;
 
 class View
 {
@@ -24,7 +23,7 @@ class View
         $elementsCount = sizeof($elements);
 
         for($i = 0; $i < $elementsCount; ++$i) {
-            /** @var Element $element */
+            /** @var AbstractElement $element */
             $element = $elements[$i];
 
             if($element instanceof Button) {

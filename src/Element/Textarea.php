@@ -2,7 +2,7 @@
 
 namespace Bricks\Element;
 
-class Textarea extends Element
+class Textarea extends AbstractElement
 {
     protected $attributes = ['rows' => 3];
 

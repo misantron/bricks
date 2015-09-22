@@ -2,7 +2,7 @@
 
 namespace Bricks\Element;
 
-class Button extends Element
+class Button extends AbstractElement
 {
     protected $attributes = [
         'type' => 'submit',

@@ -2,15 +2,22 @@
 
 namespace Bricks\Element;
 
-class HTML extends Element
+class HTML extends AbstractElement
 {
-    public function __construct($content)
+    protected $content;
+
+    /**
+     * @param string $content
+     */
+    public function __construct($content = '')
     {
-        parent::__construct('', '', ['value' => $content]);
+        if(!empty($content)) {
+            $this->content = $content;
+        }
     }
 
     public function render()
     {
-        echo $this->attributes['value'];
+        echo $this->content;
     }
 }

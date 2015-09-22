@@ -2,7 +2,7 @@
 
 namespace Bricks\Element;
 
-class Textbox extends Element
+class TextInput extends AbstractElement
 {
     protected $attributes = ['type' => 'text'];
 
