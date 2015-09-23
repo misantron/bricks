@@ -2,7 +2,7 @@
 
 namespace Bricks\Element;
 
-class ListElement extends AbstractElement
+class ListElement extends Element
 {
     protected $options;
 

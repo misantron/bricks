@@ -2,17 +2,12 @@
 
 namespace Bricks;
 
-use Bricks\Element\AbstractElement;
-use Bricks\Element\Button;
-
 class Container extends Object
 {
     /** @var string */
     protected $tag;
-    /** @var AbstractElement[] */
+    /** @var Object[] */
     protected $elements = [];
-    /** @var array */
-    protected $attributes = [];
 
     public function __construct($tag, $properties = [], $elements = [])
     {
@@ -22,18 +17,18 @@ class Container extends Object
     }
 
     /**
-     * @param AbstractElement $element
+     * @param Object $element
      */
     public function addElement($element)
     {
-        if(!$element instanceof AbstractElement) {
+        if(!$element instanceof Object) {
             throw new \InvalidArgumentException('Invalid element type');
         }
         $this->elements[] = $element;
     }
 
     /**
-     * @param AbstractElement[] $elements
+     * @param Object[] $elements
      */
     public function addElements($elements)
     {
@@ -45,7 +40,7 @@ class Container extends Object
     }
 
     /**
-     * @return AbstractElement[]
+     * @return array
      */
     public function getElements()
     {
@@ -68,15 +63,9 @@ class Container extends Object
         $elementsCount = sizeof($elements);
 
         for($i = 0; $i < $elementsCount; ++$i) {
-            /** @var AbstractElement $element */
+            /** @var Object $element */
             $element = $elements[$i];
-
-            if($element instanceof Button) {
-                $element->render();
-            } else {
-                $element->renderLabel();
-                $element->render();
-            }
+            $element->render();
         }
 
         echo '</' . $this->tag . '>';

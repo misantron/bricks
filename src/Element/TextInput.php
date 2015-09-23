@@ -2,12 +2,7 @@
 
 namespace Bricks\Element;
 
-class TextInput extends AbstractElement
+class TextInput extends Element
 {
     protected $attributes = ['type' => 'text'];
-
-    public function render()
-    {
-        parent::render();
-    }
 }

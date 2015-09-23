@@ -2,7 +2,7 @@
 
 namespace Bricks;
 
-use Bricks\Element\AbstractElement;
+use Bricks\Element\Element;
 use Bricks\Element\File;
 use Bricks\Exception\ValidationException;
 
@@ -21,7 +21,7 @@ class Form extends Container
     }
 
     /**
-     * @param AbstractElement $element
+     * @param Object $element
      */
     public function addElement($element)
     {
@@ -33,13 +33,21 @@ class Form extends Container
 
     /**
      * @param array $data
+     * @return bool|void
      * @throws ValidationException
      */
     public function validate($data)
     {
-        $errors = [];
+        $elements = $errors = [];
         foreach($this->elements as $element) {
-            /** @var AbstractElement $element */
+            if($element instanceof Container) {
+                $elements = array_merge($elements, $element->getElements());
+            } else {
+                $elements[] = $element;
+            }
+        }
+        foreach($elements as $element) {
+            /** @var Element $element */
             $name = $element->getAttribute('name');
             if(strpos('[]', $name) !== false) {
                 $name = mb_substr($name, 0, -2);

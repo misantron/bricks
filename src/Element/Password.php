@@ -2,7 +2,7 @@
 
 namespace Bricks\Element;
 
-class Password extends Textbox
+class Password extends TextInput
 {
     protected $attributes = ['type' => 'password'];
 }

@@ -2,7 +2,7 @@
 
 namespace Bricks\Element;
 
-class HTML extends AbstractElement
+class HTML extends Element
 {
     protected $content;
 

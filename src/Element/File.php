@@ -2,7 +2,7 @@
 
 namespace Bricks\Element;
 
-class File extends AbstractElement
+class File extends Element
 {
     protected $attributes = ['type' => 'file'];
 }

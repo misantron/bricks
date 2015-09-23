@@ -2,12 +2,9 @@
 
 namespace Bricks\Element;
 
-class Button extends AbstractElement
+class Button extends Element
 {
-    protected $attributes = [
-        'type' => 'submit',
-        'value' => 'Submit'
-    ];
+    protected $attributes = ['type' => 'submit', 'value' => 'Submit'];
 
     public function __construct($label = 'Submit', $type = '', $properties = null)
     {

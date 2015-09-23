@@ -4,6 +4,9 @@ namespace Bricks;
 
 abstract class Object
 {
+    /** @var array */
+    protected $attributes = [];
+
     /**
      * @param array $properties
      */
