@@ -6,27 +6,18 @@ use Bricks\Element\AbstractElement;
 use Bricks\Element\File;
 use Bricks\Exception\ValidationException;
 
-class Form extends Object
+class Form extends Container
 {
-    /** @var array */
-    protected $attributes = [];
-    /** @var array */
-    protected $elements = [];
-    /** @var View */
-    protected $view;
-
     /**
      * @param string $id
      * @param array $properties
+     * @param array $elements
      */
-    public function __construct($id, $properties = [])
+    public function __construct($id, $properties = [], $elements = [])
     {
         $properties = array_merge($properties, ['id' => $id]);
-        if($this->view === null) {
-            $this->view = new View;
-        }
 
-        parent::__construct($properties);
+        parent::__construct('form', $properties, $elements);
     }
 
     /**
@@ -34,39 +25,10 @@ class Form extends Object
      */
     public function addElement($element)
     {
-        if(!$element instanceof AbstractElement) {
-            throw new \InvalidArgumentException('');
-        }
         if($element instanceof File && !isset($this->attributes['enctype'])) {
             $this->attributes['enctype'] = 'multipart/form-data';
         }
-        $this->elements[] = $element;
-    }
-
-    /**
-     * @param AbstractElement[] $elements
-     */
-    public function addElements($elements)
-    {
-        foreach ($elements as $element) {
-            $this->addElement($element);
-        }
-    }
-
-    /**
-     * @return AbstractElement[]
-     */
-    public function getElements()
-    {
-        return $this->elements;
-    }
-
-    /**
-     * @return View
-     */
-    public function getView()
-    {
-        return $this->view;
+        parent::addElement($element);
     }
 
     /**
@@ -101,28 +63,5 @@ class Form extends Object
         if(sizeof($errors) > 0) {
             throw new ValidationException($errors);
         }
-    }
-
-    /**
-     * @param bool $returnContent
-     * @return bool|string
-     */
-    public function render($returnContent = false)
-    {
-        $this->view->setForm($this);
-
-        if($returnContent) {
-            ob_start();
-        }
-
-        $this->view->render();
-
-        if($returnContent) {
-            $content = ob_get_contents();
-            ob_end_clean();
-            return $content;
-        }
-
-        return true;
     }
 }
