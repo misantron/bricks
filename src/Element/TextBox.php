@@ -2,7 +2,7 @@
 
 namespace Bricks\Element;
 
-class Textarea extends Element
+class TextBox extends Element
 {
     protected $attributes = ['rows' => 3];
 
