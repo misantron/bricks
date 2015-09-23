@@ -2,7 +2,7 @@
 
 namespace Bricks\Validator;
 
-abstract class AbstractValidator
+abstract class Validator
 {
     /** @var string */
     protected $message;

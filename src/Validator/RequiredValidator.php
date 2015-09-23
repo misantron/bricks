@@ -2,9 +2,9 @@
 
 namespace Bricks\Validator;
 
-class RequiredValidator extends AbstractValidator
+class RequiredValidator extends Validator
 {
-    protected $message = '';
+    protected $message = 'is required';
 
     public function validate($value)
     {

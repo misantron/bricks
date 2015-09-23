@@ -11,7 +11,7 @@ class Form extends Container
     /**
      * @param string $id
      * @param array $properties
-     * @param array $elements
+     * @param Object[] $elements
      */
     public function __construct($id, $properties = [], $elements = [])
     {
