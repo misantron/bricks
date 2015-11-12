@@ -79,6 +79,6 @@ class ListElementTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($element->getValidators());
         $this->assertCount(1, $element->getValidators());
-        $this->assertContainsOnlyInstancesOf('\\Bricks\\Validator\\AbstractValidator', $element->getValidators());
+        $this->assertContainsOnlyInstancesOf('Bricks\\Validator\\Validator', $element->getValidators());
     }
 }

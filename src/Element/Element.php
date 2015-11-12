@@ -3,7 +3,7 @@
 namespace Bricks\Element;
 
 use Bricks\Object;
-use Bricks\Validator\AbstractValidator;
+use Bricks\Validator\Validator;
 
 abstract class Element extends Object
 {
@@ -11,7 +11,7 @@ abstract class Element extends Object
     protected $label;
     /** @var array */
     protected $errors = [];
-    /** @var AbstractValidator[] */
+    /** @var Validator[] */
     protected $validators = [];
 
     public function __construct($label, $name = '', $properties = [], $validators = [])
@@ -68,7 +68,7 @@ abstract class Element extends Object
     }
 
     /**
-     * @return AbstractValidator[]
+     * @return Validator[]
      */
     public function getValidators()
     {

@@ -67,7 +67,6 @@ abstract class Object
                 }
             }
         }
-
         return $str;
     }
 }
