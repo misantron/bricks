@@ -8,11 +8,11 @@ abstract class Validator
     protected $message;
 
     /**
-     * @param string $message
+     * @param string|null $message
      */
-    public function __construct($message = '')
+    public function __construct($message = null)
     {
-        if(!empty($message)) {
+        if(is_string($message) && mb_strlen($message) > 0) {
             $this->message = $message;
         }
     }
