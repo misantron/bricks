@@ -4,6 +4,7 @@ namespace Bricks\Element;
 
 class HTML extends Element
 {
+    /** @var string */
     protected $content;
 
     /**
