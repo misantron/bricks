@@ -25,9 +25,6 @@ abstract class Object
      */
     public function setAttribute($name, $value)
     {
-        if(!isset($this->attributes)) {
-            $this->attributes = [];
-        }
         $this->attributes[$name] = $value;
     }
 

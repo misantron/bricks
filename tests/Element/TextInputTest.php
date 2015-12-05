@@ -97,4 +97,19 @@ class TextInputTest extends BaseTestCase
         $this->assertFalse($element->validate(''));
         $this->assertFalse($element->validate(null));
     }
+
+    public function testGetErrors()
+    {
+        $element = new TextInput('Test');
+        $this->assertInternalType('array', $element->getErrors());
+        $this->assertEmpty($element->getErrors());
+
+        $element = new TextInput('Test', 'testName', [], [new RequiredValidator()]);
+        $element->validate(null);
+
+        $errors = $element->getErrors();
+        $this->assertNotEmpty($errors);
+        $this->assertCount(1, $errors);
+        $this->assertEquals('TestName is required', $errors[0]);
+    }
 }

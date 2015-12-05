@@ -59,7 +59,7 @@ abstract class Element extends Object
         if(sizeof($this->validators) > 0) {
             foreach($this->validators as $validator) {
                 if(!$validator->validate($value)) {
-                    $this->errors[] = $validator->getMessage();
+                    $this->errors[] = ucfirst($this->attributes['name']) . ' ' . $validator->getMessage();
                     $isValid = false;
                 }
             }
