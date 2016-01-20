@@ -4,6 +4,7 @@ namespace Bricks\Exception;
 
 class ValidationException extends \Exception
 {
+    /** @var array */
     private $data;
 
     public function __construct($data)
@@ -13,6 +14,9 @@ class ValidationException extends \Exception
         parent::__construct('Validation error');
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         return $this->data;

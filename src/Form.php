@@ -25,7 +25,7 @@ class Form extends Container
      */
     public function addElement($element)
     {
-        if($element instanceof File && !isset($this->attributes['enctype'])) {
+        if ($element instanceof File && !isset($this->attributes['enctype'])) {
             $this->attributes['enctype'] = 'multipart/form-data';
         }
         parent::addElement($element);
@@ -40,7 +40,7 @@ class Form extends Container
     {
         $elements = $errors = [];
         foreach($this->elements as $element) {
-            if($element instanceof Container) {
+            if ($element instanceof Container) {
                 $elements = array_merge($elements, $element->getElements());
             } else {
                 $elements[] = $element;
@@ -49,13 +49,13 @@ class Form extends Container
         foreach($elements as $element) {
             /** @var Element $element */
             $name = $element->getAttribute('name');
-            if(strpos('[]', $name) !== false) {
+            if (strpos('[]', $name) !== false) {
                 $name = mb_substr($name, 0, -2);
             }
             $value = null;
-            if(isset($data[$name])) {
+            if (isset($data[$name])) {
                 $value = $data[$name];
-                if(is_array($value)) {
+                if (is_array($value)) {
                     $valueCount = sizeof($value);
                     for($i = 0; $i < $valueCount; ++$i) {
                         $value[$i] = stripslashes($value[$i]);
@@ -64,11 +64,11 @@ class Form extends Container
                     $value = stripslashes($value);
                 }
             }
-            if(!$element->validate($value)) {
+            if (!$element->validate($value)) {
                 $errors[$name] = $element->getErrors();
             }
         }
-        if(sizeof($errors) > 0) {
+        if (sizeof($errors) > 0) {
             throw new ValidationException($errors);
         }
     }

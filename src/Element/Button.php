@@ -8,10 +8,10 @@ class Button extends Element
 
     public function __construct($label = 'Submit', $type = '', $properties = null)
     {
-        if(!empty($type)) {
+        if (!empty($type)) {
             $properties['type'] = $type;
         }
-        if(empty($properties['value'])) {
+        if (empty($properties['value'])) {
             $properties['value'] = $label;
         }
         parent::__construct('', '', $properties);
