@@ -48,8 +48,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $form->getElements());
         $this->assertArrayHasKey(0, $form->getElements());
 
+        $elements = $form->getElements();
         /** @var Container $container */
-        $container = reset($form->getElements());
+        $container = reset($elements);
 
         $this->assertInstanceOf('Bricks\\Container', $container);
         $this->assertCount(1, $container->getElements());
