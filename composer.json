@@ -1,15 +1,19 @@
 {
     "name": "misantron/bricks",
+    "description": "Flexible form builder with data validation and pre processing",
+    "keywords": ["php", "form", "builder"],
+    "homepage": "https://github.com/misantron/bricks",
     "type": "library",
     "license": "MIT",
-    "keywords": ["php", "html", "form", "builder"],
-    "homepage": "https://github.com/misantron/bricks",
     "require": {
-        "php": ">=5.4"
+        "php": ">=7.0",
+        "vlucas/valitron": "~1.4",
+        "psr/http-message": "~1.0",
+        "nesbot/carbon": "~1.22"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0",
-        "satooshi/php-coveralls": "~0.1"
+        "phpunit/phpunit": "~6.0",
+        "friendsofphp/php-cs-fixer": "~2.10"
     },
     "autoload": {
         "psr-4": {
@@ -20,5 +24,11 @@
         "psr-4": {
             "Bricks\\Tests\\": "tests/"
         }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "phpcs": "./vendor/bin/php-cs-fixer fix -v --diff --dry-run;"
     }
 }

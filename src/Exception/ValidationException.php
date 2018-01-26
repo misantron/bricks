@@ -2,22 +2,31 @@
 
 namespace Bricks\Exception;
 
+/**
+ * Class ValidationException
+ * @package Bricks\Exception
+ */
 class ValidationException extends \Exception
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     private $data;
 
-    public function __construct($data)
+    /**
+     * @param array $data
+     */
+    public function __construct(array $data)
     {
-        $this->data = $data;
+        parent::__construct('Data validation error');
 
-        parent::__construct('Validation error');
+        $this->data = $data;
     }
 
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
