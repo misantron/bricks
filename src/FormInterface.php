@@ -3,26 +3,28 @@
 namespace Bricks;
 
 
-use Bricks\Validation\ValidationException;
+use Bricks\Exception\ValidationException;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * Interface FormInterface
+ * @package Bricks
+ */
 interface FormInterface
 {
+    /**
+     * @param array $data
+     *
+     * @return FormInterface
+     */
+    public function setData(array $data);
+
     /**
      * @return array
      */
     public function getData(): array;
 
     /**
-     * @param string $className
-     *
-     * @return object
-     */
-    public function mapData(string $className);
-
-    /**
-     * Получение данных из запроса
-     *
      * @param RequestInterface $request
      *
      * @return FormInterface
@@ -30,8 +32,6 @@ interface FormInterface
     public function handleRequest(RequestInterface $request);
 
     /**
-     * Валидация полученных данных
-     *
      * @return FormInterface
      *
      * @throws ValidationException

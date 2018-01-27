@@ -3,9 +3,9 @@
 namespace Bricks;
 
 use Bricks\Data\Cast;
+use Bricks\Data\Validator;
 use Bricks\Exception\ConfigurationException;
 use Bricks\Exception\InvalidRequestException;
-use Bricks\Validation\Validator;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -53,19 +53,24 @@ abstract class AbstractForm implements FormInterface
     /**
      * {@inheritDoc}
      */
+    public function setData(array $data)
+    {
+        array_walk($data, function ($value, string $key) {
+            if (isset($this->validators[$key])) {
+                $this->data[$key] = $value;
+            }
+        });
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getData(): array
     {
         return array_filter($this->data, function (string $field) {
             return !isset($this->cleanup[$field]);
         }, ARRAY_FILTER_USE_KEY);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function mapData(string $className)
-    {
-        return new $className($this->data);
     }
 
     /**
@@ -133,18 +138,27 @@ abstract class AbstractForm implements FormInterface
      */
     private function parseConfiguration(array $fields)
     {
-        array_walk($fields, function (array $config, string $field) {
-            if (!isset($config['validators'])) {
-                throw new ConfigurationException('field validation rules are not set: ' . $field);
-            }
-            if (isset($config['type'])) {
-                $this->types[$field] = $config['type'];
-            }
-            $this->validators[$field] = $config['validators'];
-            if (isset($config['cleanup']) && $config['cleanup'] === true) {
-                $this->cleanup[$field] = true;
+        $invalidConfigFields = [];
+
+        array_walk($fields, function (array $config, string $field) use (&$invalidConfigFields) {
+            if (isset($config['validators'])) {
+                $this->validators[$field] = $config['validators'];
+                if (isset($config['type'])) {
+                    $this->types[$field] = $config['type'];
+                }
+                if (isset($config['cleanup']) && $config['cleanup'] === true) {
+                    $this->cleanup[$field] = true;
+                }
+            } else {
+                $invalidConfigFields[] = $field;
             }
         });
+
+        if (!empty($invalidConfigFields)) {
+            throw new ConfigurationException(
+                'fields validation rules are not set: ' . implode(',', $invalidConfigFields)
+            );
+        }
     }
 
     /**

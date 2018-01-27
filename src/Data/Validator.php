@@ -1,26 +1,20 @@
 <?php
 
-namespace Bricks\Validation;
+namespace Bricks\Data;
 
 use Bricks\Exception\ValidationException;
 
 /**
  * Class Validator
- * @package Bricks\Validation
+ * @package Bricks\Data
  */
 class Validator extends \Valitron\Validator
 {
-    protected $validUrlPrefixes = [
-        'http://',
-        'https://',
-        'ftp://',
-    ];
-
     /**
      * @return bool
      * @throws ValidationException
      */
-    public function validate()
+    public function validate(): bool
     {
         if (parent::validate() === false) {
             throw new ValidationException($this->_errors);
