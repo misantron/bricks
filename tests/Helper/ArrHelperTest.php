@@ -32,4 +32,27 @@ class ArrHelperTest extends BaseTestCase
             [array_fill_keys([54, 467, 424, 866], 1), false],
         ];
     }
+
+    public function testUnflatten()
+    {
+        $array = [
+            'foo' => 'val1',
+            'foo.bar' => 'val2',
+            'foo.bar.baz' => 'val3',
+            'foo.bar.quux' => 'val4',
+            'test' => 'val5'
+        ];
+
+        $expected = [
+            'foo' => [
+                'bar' => [
+                    'baz' => 'val3',
+                    'quux' => 'val4',
+                ]
+            ],
+            'test' => 'val5'
+        ];
+
+        $this->assertEquals($expected, ArrHelper::unflatten($array));
+    }
 }

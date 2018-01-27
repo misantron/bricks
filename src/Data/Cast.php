@@ -23,17 +23,7 @@ class Cast implements CastInterface
      */
     private function __construct(array $config)
     {
-        foreach ($config as $key => $type) {
-            $parts = explode('.', $key, 2);
-            if (isset($parts[1])) {
-                if (isset($this->config[$parts[0]]) && is_string($this->config[$parts[0]])) {
-                    $this->config[$parts[0]] = [];
-                }
-                $this->config[$parts[0]][$parts[1]] = $type;
-            } else {
-                $this->config[$parts[0]] = $type;
-            }
-        }
+        $this->config = ArrHelper::unflatten($config);
     }
 
     /**
@@ -51,22 +41,22 @@ class Cast implements CastInterface
      */
     public function execute(array $data): array
     {
+        return $this->cast($data, $this->config);
+    }
+
+    /**
+     * @param mixed $data
+     * @param array $config
+     * @return array
+     */
+    private function cast($data, array $config)
+    {
         $casted = [];
         foreach ($data as $field => $value) {
-            if (is_array($value) && ArrHelper::isStrKeysArray($value)) {
-                foreach ($value as $key => $val) {
-                    $method = $this->config[$field][$key] ?? null;
-                    if (empty($method) || $val === null) {
-                        $casted[$field][$key] = $val;
-                    } else {
-                        if (!method_exists($this, $method)) {
-                            throw new ConfigurationException('unknown field type: ' . $method);
-                        }
-                        $casted[$field][$key] = call_user_func([$this, $method], $value);
-                    }
-                }
+            if (is_array($value) && !empty($value) && ArrHelper::isStrKeysArray($value)) {
+                $casted[$field] = $this->cast($value, $config[$field]);
             } else {
-                $method = $this->config[$field] ?? null;
+                $method = $config[$field] ?? null;
                 if (empty($method) || $value === null) {
                     $casted[$field] = $value;
                 } else {
@@ -97,18 +87,35 @@ class Cast implements CastInterface
     {
         $array = array_map(function ($val) {
             return (int)$val;
-        }, $value);
+        }, array_filter($value));
 
-        return array_values(array_filter($array));
+        return array_values($array);
     }
 
     /**
-     * @param string $value
-     * @return string
+     * @param array $value
+     * @return array
      */
-    private function email(string $value)
+    private function floatArray(array $value)
     {
-        return mb_strtolower($value, 'utf-8');
+        $array = array_map(function ($val) {
+            return (float)$val;
+        }, array_filter($value));
+
+        return array_values($array);
+    }
+
+    /**
+     * @param array $value
+     * @return array
+     */
+    private function strArray(array $value)
+    {
+        $array = array_map(function ($val) {
+            return (string)$val;
+        }, array_filter($value));
+
+        return array_values($array);
     }
 
     /**
