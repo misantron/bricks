@@ -23,7 +23,7 @@ class Validator extends \Valitron\Validator
     public function validate()
     {
         if (parent::validate() === false) {
-            throw new ValidationException($this->errors());
+            throw new ValidationException($this->_errors);
         }
         return true;
     }
