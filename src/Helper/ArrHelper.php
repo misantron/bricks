@@ -26,7 +26,7 @@ class ArrHelper
     {
         $output = [];
         foreach ($array as $key => $value) {
-            static::set($output, $key, $value);
+            self::set($output, $key, $value);
             if (is_array($value) && strpos($key, '.') === false) {
                 $output[$key] = static::unflatten($value);
             }
