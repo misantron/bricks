@@ -79,20 +79,45 @@ class CastTest extends BaseTestCase
         $this->assertEquals($expected, $parsed);
     }
 
-    public function testCastDateTime()
+    /**
+     * @expectedException \Bricks\Exception\InvalidRequestException
+     * @expectedExceptionMessage Invalid request: unexpected datetime format
+     */
+    public function testDateTimeWithUnexpectedInitialData()
     {
         $config = ['foo' => 'dateTime'];
-        $values = ['foo' => (new \DateTime())->format('Y-m-d H:i:s')];
+        $values = ['foo' => false];
+
+        Cast::create($config)->execute($values);
+    }
+
+    public function testDateTime()
+    {
+        $config = [
+            'foo' => 'dateTime',
+            'bar' => 'dateTime',
+        ];
+        $values = [
+            'foo' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'bar' => (new \DateTime())->getTimestamp(),
+        ];
 
         $parsed = Cast::create($config)->execute($values);
+
         /** @var Carbon $dateTime */
         $dateTime = $parsed['foo'];
 
         $this->assertInstanceOf(Carbon::class, $dateTime);
         $this->assertEquals($values['foo'], $dateTime->toDateTimeString());
+
+        /** @var Carbon $dateTime */
+        $dateTime = $parsed['bar'];
+
+        $this->assertInstanceOf(Carbon::class, $dateTime);
+        $this->assertEquals($values['bar'], $dateTime->getTimestamp());
     }
 
-    public function testCastIntArray()
+    public function testIntArray()
     {
         $config = ['foo' => 'intArray'];
         $values = ['foo' => ['1', 2, null, '']];
@@ -100,5 +125,120 @@ class CastTest extends BaseTestCase
         $parsed = Cast::create($config)->execute($values);
 
         $this->assertEquals(['foo' => [1, 2]], $parsed);
+    }
+
+    public function testStrArray()
+    {
+        $config = ['foo' => 'strArray'];
+        $values = ['foo' => ['1', 2, null, '']];
+
+        $parsed = Cast::create($config)->execute($values);
+
+        $this->assertEquals(['foo' => ['1', '2']], $parsed);
+    }
+
+    public function testFloatArray()
+    {
+        $config = ['foo' => 'floatArray'];
+        $values = ['foo' => ['1', 2, null, '']];
+
+        $parsed = Cast::create($config)->execute($values);
+
+        $this->assertEquals(['foo' => [1.0, 2.0]], $parsed);
+    }
+
+    public function testInteger()
+    {
+        $config = [
+            'foo' => 'integer',
+            'bar' => 'integer',
+        ];
+        $values = [
+            'foo' => 123.26,
+            'bar' => '12',
+        ];
+
+        $parsed = Cast::create($config)->execute($values);
+
+        $this->assertEquals([
+            'foo' => 123,
+            'bar' => 12,
+        ], $parsed);
+    }
+
+    public function testFloat()
+    {
+        $config = [
+            'foo' => 'float',
+            'bar' => 'float',
+        ];
+        $values = [
+            'foo' => 123,
+            'bar' => '10.34',
+        ];
+
+        $parsed = Cast::create($config)->execute($values);
+
+        $this->assertEquals([
+            'foo' => 123.0,
+            'bar' => 10.34,
+        ], $parsed);
+    }
+
+    public function testString()
+    {
+        $config = [
+            'foo' => 'string',
+            'bar' => 'string',
+        ];
+        $values = [
+            'foo' => 12345,
+            'bar' => false,
+        ];
+
+        $parsed = Cast::create($config)->execute($values);
+
+        $this->assertEquals([
+            'foo' => '12345',
+            'bar' => '',
+        ], $parsed);
+    }
+
+    public function testArray()
+    {
+        $config = [
+            'foo' => 'array',
+            'bar' => 'array',
+        ];
+        $values = [
+            'foo' => 5,
+            'bar' => ['baz'],
+        ];
+
+        $parsed = Cast::create($config)->execute($values);
+
+        $this->assertEquals([
+            'foo' => [5],
+            'bar' => ['baz'],
+        ], $parsed);
+    }
+
+    public function testBoolean()
+    {
+        $config = [
+            'foo' => 'boolean',
+            'bar' => 'boolean',
+        ];
+        $values = [
+            'foo' => 'true',
+            'bar' => 0,
+        ];
+
+        $parsed = Cast::create($config)->execute($values);
+
+        $this->assertEquals([
+            'foo' => true,
+            'bar' => false,
+        ], $parsed);
     }
 }

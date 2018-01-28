@@ -4,6 +4,7 @@ namespace Bricks\Data;
 
 
 use Bricks\Exception\ConfigurationException;
+use Bricks\Exception\InvalidRequestException;
 use Bricks\Helper\ArrHelper;
 use Carbon\Carbon;
 
@@ -71,22 +72,27 @@ class Cast implements CastInterface
     }
 
     /**
-     * @param string $value
+     * @param string|int $value
      * @return Carbon
      */
-    private function dateTime(string $value)
+    private function dateTime($value): Carbon
     {
-        return Carbon::parse($value);
+        if (is_string($value)) {
+            return Carbon::parse($value);
+        } elseif (is_int($value)) {
+            return Carbon::now()->setTimestamp($value);
+        }
+        throw new InvalidRequestException('unexpected datetime format');
     }
 
     /**
      * @param array $value
      * @return array
      */
-    private function intArray(array $value)
+    private function intArray(array $value): array
     {
         $array = array_map(function ($val) {
-            return (int)$val;
+            return $this->integer($val);
         }, array_filter($value));
 
         return array_values($array);
@@ -96,10 +102,10 @@ class Cast implements CastInterface
      * @param array $value
      * @return array
      */
-    private function floatArray(array $value)
+    private function floatArray(array $value): array
     {
         $array = array_map(function ($val) {
-            return (float)$val;
+            return $this->float($val);
         }, array_filter($value));
 
         return array_values($array);
@@ -109,56 +115,56 @@ class Cast implements CastInterface
      * @param array $value
      * @return array
      */
-    private function strArray(array $value)
+    private function strArray(array $value): array
     {
         $array = array_map(function ($val) {
-            return (string)$val;
+            return $this->string($val);
         }, array_filter($value));
 
         return array_values($array);
     }
 
     /**
-     * @param string|int $value
+     * @param mixed $value
      * @return int
      */
-    private function integer($value)
+    private function integer($value): int
     {
         return (int)$value;
     }
 
     /**
-     * @param string|float $value
-     * @return int
+     * @param mixed $value
+     * @return float
      */
-    private function float($value)
+    private function float($value): float
     {
         return (float)$value;
     }
 
     /**
-     * @param string|int $value
-     * @return int
+     * @param mixed $value
+     * @return string
      */
-    private function string($value)
+    private function string($value): string
     {
-        return (string)$value;
+        return '' . $value;
     }
 
     /**
-     * @param string|array $value
+     * @param mixed $value
      * @return array
      */
-    private function array($value)
+    private function array($value): array
     {
         return (array)$value;
     }
 
     /**
-     * @param string|bool $value
+     * @param mixed $value
      * @return bool
      */
-    private function boolean($value)
+    private function boolean($value): bool
     {
         return is_string($value) ? $value === 'true' : (bool)$value;
     }
