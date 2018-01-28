@@ -46,6 +46,14 @@ abstract class AbstractForm implements FormInterface
     }
 
     /**
+     * @return static
+     */
+    public static function create()
+    {
+        return new static();
+    }
+
+    /**
      * @return array
      */
     abstract protected function fields(): array;

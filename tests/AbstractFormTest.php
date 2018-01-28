@@ -5,6 +5,7 @@ namespace Bricks\Tests;
 
 use Bricks\AbstractForm;
 use Bricks\Exception\ValidationException;
+use Bricks\Tests\Fixture\Form;
 
 /**
  * Class AbstractFormTest
@@ -116,6 +117,11 @@ class AbstractFormTest extends BaseTestCase
         $this->assertAttributeEquals($validators, 'validators', $form);
         $this->assertAttributeEquals($types, 'types', $form);
         $this->assertAttributeEquals($cleanup, 'cleanup', $form);
+    }
+
+    public function testCreate()
+    {
+        $this->assertInstanceOf(Form::class, Form::create());
     }
 
     public function testSetData()
