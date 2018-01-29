@@ -3,6 +3,10 @@
 namespace Bricks\Helper;
 
 
+/**
+ * Class ArrHelper
+ * @package Bricks\Helper
+ */
 class ArrHelper
 {
     /**
@@ -42,7 +46,7 @@ class ArrHelper
     private static function set(array &$array, string $key, $value)
     {
         $keys = explode('.', $key);
-        while (count($keys) > 1) {
+        while (sizeof($keys) > 1) {
             $key = array_shift($keys);
             if (!isset($array[$key]) || !is_array($array[$key])) {
                 $array[$key] = [];

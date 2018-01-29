@@ -3,15 +3,15 @@
 namespace Bricks\Tests\Data;
 
 
-use Bricks\Data\Cast;
+use Bricks\Data\Transducer;
 use Bricks\Tests\BaseTestCase;
 use Carbon\Carbon;
 
 /**
- * Class CastTest
+ * Class TransducerTest
  * @package Bricks\Tests\Data
  */
-class CastTest extends BaseTestCase
+class TransducerTest extends BaseTestCase
 {
     public function testCreate()
     {
@@ -31,7 +31,7 @@ class CastTest extends BaseTestCase
             ],
         ];
 
-        $service = Cast::create($config);
+        $service = Transducer::create($config);
 
         $this->assertAttributeEquals($expected, 'config', $service);
     }
@@ -46,7 +46,7 @@ class CastTest extends BaseTestCase
             'foo' => 'bar'
         ];
 
-        Cast::create($config)->execute(['foo' => 'baz']);
+        Transducer::create($config)->execute(['foo' => 'baz']);
     }
 
     public function testExecute()
@@ -74,7 +74,7 @@ class CastTest extends BaseTestCase
             'quux' => 23,
         ];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         $this->assertEquals($expected, $parsed);
     }
@@ -88,7 +88,7 @@ class CastTest extends BaseTestCase
         $config = ['foo' => 'dateTime'];
         $values = ['foo' => false];
 
-        Cast::create($config)->execute($values);
+        Transducer::create($config)->execute($values);
     }
 
     public function testDateTime()
@@ -102,7 +102,7 @@ class CastTest extends BaseTestCase
             'bar' => (new \DateTime())->getTimestamp(),
         ];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         /** @var Carbon $dateTime */
         $dateTime = $parsed['foo'];
@@ -122,7 +122,7 @@ class CastTest extends BaseTestCase
         $config = ['foo' => 'intArray'];
         $values = ['foo' => ['1', 2, null, '']];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         $this->assertEquals(['foo' => [1, 2]], $parsed);
     }
@@ -132,7 +132,7 @@ class CastTest extends BaseTestCase
         $config = ['foo' => 'strArray'];
         $values = ['foo' => ['1', 2, null, '']];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         $this->assertEquals(['foo' => ['1', '2']], $parsed);
     }
@@ -142,7 +142,7 @@ class CastTest extends BaseTestCase
         $config = ['foo' => 'floatArray'];
         $values = ['foo' => ['1', 2, null, '']];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         $this->assertEquals(['foo' => [1.0, 2.0]], $parsed);
     }
@@ -158,7 +158,7 @@ class CastTest extends BaseTestCase
             'bar' => '12',
         ];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         $this->assertEquals([
             'foo' => 123,
@@ -177,7 +177,7 @@ class CastTest extends BaseTestCase
             'bar' => '10.34',
         ];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         $this->assertEquals([
             'foo' => 123.0,
@@ -196,7 +196,7 @@ class CastTest extends BaseTestCase
             'bar' => false,
         ];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         $this->assertEquals([
             'foo' => '12345',
@@ -215,7 +215,7 @@ class CastTest extends BaseTestCase
             'bar' => ['baz'],
         ];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         $this->assertEquals([
             'foo' => [5],
@@ -234,7 +234,7 @@ class CastTest extends BaseTestCase
             'bar' => 0,
         ];
 
-        $parsed = Cast::create($config)->execute($values);
+        $parsed = Transducer::create($config)->execute($values);
 
         $this->assertEquals([
             'foo' => true,

@@ -9,10 +9,10 @@ use Bricks\Helper\ArrHelper;
 use Carbon\Carbon;
 
 /**
- * Class Cast
+ * Class Transducer
  * @package Bricks\Data
  */
-class Cast implements CastInterface
+class Transducer implements TransducerInterface
 {
     /**
      * @var array
@@ -42,40 +42,38 @@ class Cast implements CastInterface
      */
     public function execute(array $data): array
     {
-        return $this->cast($data, $this->config);
+        return $this->process($data, $this->config);
     }
 
     /**
-     * @param mixed $data
+     * @param array $data
      * @param array $config
      * @return array
      */
-    private function cast($data, array $config)
+    private function process(array $data, array $config): array
     {
-        $casted = [];
+        $processed = [];
         foreach ($data as $field => $value) {
             if (is_array($value) && !empty($value) && ArrHelper::isStrKeysArray($value)) {
-                $casted[$field] = $this->cast($value, $config[$field]);
+                $processed[$field] = $this->process($value, $config[$field]);
             } else {
                 $method = $config[$field] ?? null;
                 if (empty($method) || $value === null) {
-                    $casted[$field] = $value;
+                    $processed[$field] = $value;
                 } else {
-                    if (!method_exists($this, $method)) {
-                        throw new ConfigurationException('unknown field type: ' . $method);
-                    }
-                    $casted[$field] = call_user_func([$this, $method], $value);
+                    $this->assertConversionMethodExists($method);
+                    $processed[$field] = call_user_func([$this, $method], $value);
                 }
             }
         }
-        return $casted;
+        return $processed;
     }
 
     /**
      * @param string|int $value
      * @return Carbon
      */
-    private function dateTime($value): Carbon
+    protected function dateTime($value): Carbon
     {
         if (is_string($value)) {
             return Carbon::parse($value);
@@ -89,10 +87,10 @@ class Cast implements CastInterface
      * @param array $value
      * @return array
      */
-    private function intArray(array $value): array
+    protected function intArray(array $value): array
     {
         $array = array_map(function ($val) {
-            return $this->integer($val);
+            return (int)$val;
         }, array_filter($value));
 
         return array_values($array);
@@ -102,10 +100,10 @@ class Cast implements CastInterface
      * @param array $value
      * @return array
      */
-    private function floatArray(array $value): array
+    protected function floatArray(array $value): array
     {
         $array = array_map(function ($val) {
-            return $this->float($val);
+            return (float)$val;
         }, array_filter($value));
 
         return array_values($array);
@@ -115,10 +113,10 @@ class Cast implements CastInterface
      * @param array $value
      * @return array
      */
-    private function strArray(array $value): array
+    protected function strArray(array $value): array
     {
         $array = array_map(function ($val) {
-            return $this->string($val);
+            return (string)$val;
         }, array_filter($value));
 
         return array_values($array);
@@ -128,7 +126,7 @@ class Cast implements CastInterface
      * @param mixed $value
      * @return int
      */
-    private function integer($value): int
+    protected function integer($value): int
     {
         return (int)$value;
     }
@@ -137,7 +135,7 @@ class Cast implements CastInterface
      * @param mixed $value
      * @return float
      */
-    private function float($value): float
+    protected function float($value): float
     {
         return (float)$value;
     }
@@ -146,7 +144,7 @@ class Cast implements CastInterface
      * @param mixed $value
      * @return string
      */
-    private function string($value): string
+    protected function string($value): string
     {
         return '' . $value;
     }
@@ -155,7 +153,7 @@ class Cast implements CastInterface
      * @param mixed $value
      * @return array
      */
-    private function array($value): array
+    protected function array($value): array
     {
         return (array)$value;
     }
@@ -164,8 +162,20 @@ class Cast implements CastInterface
      * @param mixed $value
      * @return bool
      */
-    private function boolean($value): bool
+    protected function boolean($value): bool
     {
         return is_string($value) ? $value === 'true' : (bool)$value;
+    }
+
+    /**
+     * @param string $method
+     *
+     * @throws ConfigurationException
+     */
+    private function assertConversionMethodExists(string $method)
+    {
+        if (!method_exists($this, $method)) {
+            throw new ConfigurationException('unknown field type: ' . $method);
+        }
     }
 }

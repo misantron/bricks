@@ -2,7 +2,7 @@
 
 namespace Bricks;
 
-use Bricks\Data\Cast;
+use Bricks\Data\Transducer;
 use Bricks\Data\Validator;
 use Bricks\Exception\ConfigurationException;
 use Bricks\Exception\InvalidRequestException;
@@ -119,16 +119,16 @@ abstract class AbstractForm implements FormInterface
      */
     protected function fetchRequestData(array $data)
     {
-        $casted = Cast::create($this->types)->execute($data);
+        $processed = Transducer::create($this->types)->execute($data);
 
         $fields = array_keys($this->validators);
 
         foreach ($fields as $field) {
-            if (isset($casted[$field])) {
+            if (isset($processed[$field])) {
                 if (isset($this->data[$field]) && is_array($this->data[$field])) {
-                    $this->data[$field] = array_merge($this->data[$field], $casted[$field]);
+                    $this->data[$field] = array_merge($this->data[$field], $processed[$field]);
                 } else {
-                    $this->data[$field] = $casted[$field];
+                    $this->data[$field] = $processed[$field];
                 }
             }
         }
@@ -149,7 +149,7 @@ abstract class AbstractForm implements FormInterface
         $invalidConfigFields = [];
 
         array_walk($fields, function (array $config, string $field) use (&$invalidConfigFields) {
-            if (isset($config['validators'])) {
+            if (isset($config['validators']) && is_array($config['validators'])) {
                 $this->validators[$field] = $config['validators'];
                 if (isset($config['type'])) {
                     $this->types[$field] = $config['type'];
@@ -170,11 +170,9 @@ abstract class AbstractForm implements FormInterface
     }
 
     /**
-     * Построение правил валидации на основе заданного конфига
-     *
      * @return array
      */
-    private function buildValidationRules()
+    private function buildValidationRules(): array
     {
         $rules = [];
         foreach ($this->validators as $field => $config) {

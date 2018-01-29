@@ -3,10 +3,10 @@
 namespace Bricks\Data;
 
 /**
- * Interface CastInterface
+ * Interface TransducerInterface
  * @package Bricks\Data
  */
-interface CastInterface
+interface TransducerInterface
 {
     /**
      * @param array $data

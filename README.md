@@ -81,7 +81,7 @@ $data = $form->getData(); // extracting processed and validated data from form
 Custom user type can be easily added:
 
 ```php
-class MyCast extends \Bricks\Data\Cast
+class MyTransducer extends \Bricks\Data\Cast
 {
     private funtion myType($value)
     {
