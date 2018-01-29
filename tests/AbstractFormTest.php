@@ -30,7 +30,7 @@ class AbstractFormTest extends BaseTestCase
 
     /**
      * @expectedException \Bricks\Exception\ConfigurationException
-     * @expectedExceptionMessage Configuration error: fields validation rules are not set: foo,bar
+     * @expectedExceptionMessage Configuration error: fields validation rules are not set: foo
      */
     public function testConstructorWithInvalidConfig()
     {

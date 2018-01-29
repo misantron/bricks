@@ -146,26 +146,26 @@ abstract class AbstractForm implements FormInterface
      */
     private function parseConfiguration(array $fields)
     {
-        $invalidConfigFields = [];
-
-        array_walk($fields, function (array $config, string $field) use (&$invalidConfigFields) {
-            if (isset($config['validators']) && is_array($config['validators'])) {
-                $this->validators[$field] = $config['validators'];
-                if (isset($config['type'])) {
-                    $this->types[$field] = $config['type'];
-                }
-                if (isset($config['cleanup']) && $config['cleanup'] === true) {
-                    $this->cleanup[$field] = true;
-                }
-            } else {
-                $invalidConfigFields[] = $field;
+        array_walk($fields, function (array $config, string $field) {
+            $this->assertFieldConfigHasValidators($field, $config);
+            $this->validators[$field] = $config['validators'];
+            if (isset($config['type'])) {
+                $this->types[$field] = $config['type'];
+            }
+            if (isset($config['cleanup']) && $config['cleanup'] === true) {
+                $this->cleanup[$field] = true;
             }
         });
+    }
 
-        if (!empty($invalidConfigFields)) {
-            throw new ConfigurationException(
-                'fields validation rules are not set: ' . implode(',', $invalidConfigFields)
-            );
+    /**
+     * @param string $field
+     * @param array $config
+     */
+    private function assertFieldConfigHasValidators(string $field, array $config)
+    {
+        if (!isset($config['validators']) || !is_array($config['validators'])) {
+            throw new ConfigurationException('fields validation rules are not set: ' . $field);
         }
     }
 
