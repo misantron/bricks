@@ -6,6 +6,7 @@ namespace Bricks\Tests;
 use Bricks\AbstractForm;
 use Bricks\Exception\ValidationException;
 use Bricks\Tests\Fixture\Form;
+use Carbon\Carbon;
 
 /**
  * Class AbstractFormTest
@@ -210,6 +211,36 @@ class AbstractFormTest extends BaseTestCase
         $form->handleRequest($request);
 
         $this->assertAttributeEquals(['foo' => 'test', 'bar' => 3, 'baz' => [1,2,3,4]], 'data', $form);
+    }
+
+    public function testValidationRuleWithCustomMessage()
+    {
+        $form = new class extends AbstractForm
+        {
+            protected function fields(): array
+            {
+                return [
+                    'foo' => [
+                        'validators' => [
+                            'instanceOf' => [
+                                Carbon::class,
+                                'message' => 'Custom message'
+                            ],
+                        ]
+                    ]
+                ];
+            }
+        };
+
+        $form->setData(['foo' => new \stdClass()]);
+
+        try {
+            $form->validate();
+        } catch (\Exception $e) {
+            /** @var ValidationException $e */
+            $this->assertInstanceOf(ValidationException::class, $e);
+            $this->assertEquals(['foo' => ['Custom message']], $e->getData());
+        }
     }
 
     public function testValidateNegative()

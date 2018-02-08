@@ -30,4 +30,28 @@ class Validator extends \Valitron\Validator
     {
         return new static($data);
     }
+
+    /**
+     * @param array $rules
+     */
+    public function rules($rules)
+    {
+        foreach ($rules as $ruleType => $params) {
+            if (is_array($params)) {
+                foreach ($params as $innerParams) {
+                    if (!is_array($innerParams)) {
+                        $innerParams = (array)$innerParams;
+                    }
+                    array_unshift($innerParams, $ruleType);
+                    call_user_func_array([$this, 'rule'], $innerParams);
+                    $arguments = array_pop($innerParams);
+                    if (is_array($arguments) && isset($arguments['message'])) {
+                        $this->message($arguments['message']);
+                    }
+                }
+            } else {
+                $this->rule($ruleType, $params);
+            }
+        }
+    }
 }
