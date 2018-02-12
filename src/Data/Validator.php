@@ -33,8 +33,9 @@ class Validator extends \Valitron\Validator
 
     /**
      * @param array $rules
+     * @param array $messages
      */
-    public function rules($rules)
+    public function rules($rules, $messages = [])
     {
         foreach ($rules as $ruleType => $params) {
             if (is_array($params)) {
@@ -42,11 +43,10 @@ class Validator extends \Valitron\Validator
                     if (!is_array($innerParams)) {
                         $innerParams = (array)$innerParams;
                     }
-                    array_unshift($innerParams, $ruleType);
-                    call_user_func_array([$this, 'rule'], $innerParams);
-                    $arguments = array_pop($innerParams);
-                    if (is_array($arguments) && isset($arguments['message'])) {
-                        $this->message($arguments['message']);
+                    $fieldName = $innerParams[0];
+                    $this->rule($ruleType, ...$innerParams);
+                    if (isset($messages[$ruleType][$fieldName])) {
+                        $this->message($messages[$ruleType][$fieldName]);
                     }
                 }
             } else {

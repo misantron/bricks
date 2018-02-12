@@ -224,8 +224,10 @@ class AbstractFormTest extends BaseTestCase
                         'validators' => [
                             'instanceOf' => [
                                 Carbon::class,
-                                'message' => 'Custom message'
                             ],
+                        ],
+                        'messages' => [
+                            'instanceOf' => 'Custom message'
                         ]
                     ]
                 ];
