@@ -105,9 +105,10 @@ abstract class AbstractForm implements FormInterface
     public function validate()
     {
         $rules = $this->buildValidationRules();
+        $messages = $this->buildCustomValidationMessages();
 
         $validator = Validator::create($this->data);
-        $validator->rules($rules);
+        $validator->rules($rules, $messages);
         $validator->validate();
 
         return $this;
@@ -187,5 +188,23 @@ abstract class AbstractForm implements FormInterface
             }
         }
         return $rules;
+    }
+
+    /**
+     * @return array
+     */
+    private function buildCustomValidationMessages(): array
+    {
+        $fields = $this->fields();
+        $messages = [];
+        foreach ($this->validators as $field => $config) {
+            foreach ($config as $type => $data) {
+                if (isset($fields[$field]['messages'][$type])) {
+                    $messages[$type][$field] = $fields[$field]['messages'][$type];
+                }
+            }
+        }
+
+        return $messages;
     }
 }
