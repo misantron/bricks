@@ -50,7 +50,7 @@ abstract class AbstractForm implements FormInterface
      */
     public static function create()
     {
-        return new static();
+        return new static;
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class AbstractForm implements FormInterface
             parse_str($request->getUri()->getQuery(), $data);
         } else {
             $data = json_decode($request->getBody()->getContents(), true);
-            if (!isset($data) && json_last_error() !== JSON_ERROR_NONE) {
+            if ($data === null && json_last_error() !== \JSON_ERROR_NONE) {
                 throw new InvalidRequestException('unable to parse json body: ' . json_last_error_msg());
             }
         }
@@ -162,6 +162,8 @@ abstract class AbstractForm implements FormInterface
     /**
      * @param string $field
      * @param array $config
+     *
+     * @throws ConfigurationException
      */
     private function assertFieldConfigHasValidators(string $field, array $config)
     {

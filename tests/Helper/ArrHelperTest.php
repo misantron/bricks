@@ -2,7 +2,6 @@
 
 namespace Bricks\Tests\Helper;
 
-
 use Bricks\Helper\ArrHelper;
 use Bricks\Tests\BaseTestCase;
 

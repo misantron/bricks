@@ -2,7 +2,6 @@
 
 namespace Bricks\Helper;
 
-
 /**
  * Class ArrHelper
  * @package Bricks\Helper

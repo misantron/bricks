@@ -2,7 +2,6 @@
 
 namespace Bricks\Tests\Fixture;
 
-
 use Bricks\AbstractForm;
 
 /**

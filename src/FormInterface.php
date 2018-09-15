@@ -2,7 +2,6 @@
 
 namespace Bricks;
 
-
 use Bricks\Exception\ValidationException;
 use Psr\Http\Message\RequestInterface;
 

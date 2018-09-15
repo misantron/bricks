@@ -16,8 +16,8 @@ class Validator extends \Valitron\Validator
      */
     public function validate(): bool
     {
-        if (parent::validate() === false) {
-            throw new ValidationException($this->_errors);
+        if (!parent::validate()) {
+            throw new ValidationException($this->errors());
         }
         return true;
     }
